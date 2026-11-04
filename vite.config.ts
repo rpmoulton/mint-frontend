@@ -11,4 +11,14 @@ export default defineConfig({
       "@": resolve(import.meta.dirname, "./src"),
     },
   },
+  server: {
+    port: 5173,
+    proxy: {
+      "/api": {
+        target: "https://localhost:3001",
+        secure: false, // allow self-signed TLS cert in dev
+        changeOrigin: true,
+      },
+    },
+  },
 })
