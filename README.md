@@ -8,6 +8,8 @@ The application is designed to be responsive, mobile-friendly, and eventually in
 
 > **Project Status:** Early development. Features and integrations are being implemented incrementally.
 
+![Mint Alternative Live Financial Dashboard](docs/screenshots/dashboard.png)
+
 ## Tech Stack
 
 | Technology | Purpose |
@@ -147,6 +149,12 @@ npm run dev
 
 Vite will display the local development URL in the terminal.
 
+### Run Tests
+
+```bash
+npm test
+```
+
 ### Production Build
 
 ```bash
@@ -157,36 +165,35 @@ npm run build
 
 Mint Frontend is designed to connect to the separate Mint Alternative Go API.
 
-The frontend will use a centralized API client and TanStack Query for server-state management.
+The frontend uses a centralized API client and TanStack Query for server-state management.
 
-Planned API resources include:
+Available API resources include:
 
-| Resource | Example Endpoint |
+| Resource | Endpoint |
 |---|---|
+| Authentication | `POST /api/v1/auth/login`, `POST /api/v1/auth/refresh`, `GET /api/v1/auth/me`, `POST /api/v1/auth/logout` |
+| Financial Summary | `GET /api/v1/dashboard/summary` |
 | Accounts | `GET /api/v1/accounts` |
 | Transactions | `GET /api/v1/transactions` |
 | Budgets | `GET /api/v1/budgets` |
-| Financial Summary | `GET /api/v1/summary` |
 | Categories | `GET /api/v1/categories` |
-
-These endpoints represent the intended API contract and may change during backend development.
 
 ## Development Roadmap
 
 ### Phase 1 — Foundation
 
-- [ ] Configure application routing
-- [ ] Establish responsive application layout
-- [ ] Configure shared UI components
-- [ ] Implement API client
-- [ ] Add loading, error, and empty states
+- [x] Configure application routing
+- [x] Establish responsive application layout
+- [x] Configure shared UI components
+- [x] Implement API client
+- [x] Add loading, error, and empty states
 
 ### Phase 2 — Dashboard
 
-- [ ] Financial overview cards
-- [ ] Income and expense charts
-- [ ] Spending category visualization
-- [ ] Recent transactions
+- [x] Financial overview cards
+- [x] Income and expense charts
+- [x] Spending category visualization
+- [x] Recent transactions
 - [ ] Account balance summaries
 
 ### Phase 3 — Financial Management
@@ -199,18 +206,18 @@ These endpoints represent the intended API contract and may change during backen
 
 ### Phase 4 — Mobile and PWA
 
-- [ ] Mobile-first navigation
-- [ ] Responsive financial charts
+- [x] Mobile-first navigation
+- [x] Responsive financial charts
 - [ ] Installable PWA
 - [ ] Offline handling and synchronization strategy
 - [ ] Mobile usability improvements
 
 ### Phase 5 — Production Readiness
 
-- [ ] Authentication integration
+- [x] Authentication integration
 - [ ] Accessibility review
-- [ ] Unit and component testing
-- [ ] End-to-end testing
+- [x] Unit and component testing
+- [x] End-to-end testing
 - [ ] Performance optimization
 - [ ] Production deployment configuration
 
