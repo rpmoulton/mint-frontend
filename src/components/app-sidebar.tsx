@@ -1,8 +1,4 @@
-import * as React from "react"
-
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
+import { NavLink, useLocation } from "react-router"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -12,190 +8,113 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, CameraIcon, FileTextIcon, Settings2Icon, CircleHelpIcon, SearchIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, CommandIcon } from "lucide-react"
+import {
+  LayoutDashboard,
+  Landmark,
+  ArrowLeftRight,
+  PiggyBank,
+  Tags,
+  Settings,
+} from "lucide-react"
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+const NAV_ITEMS = [
+  {
+    title: "Dashboard",
+    url: "/",
+    icon: LayoutDashboard,
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: (
-        <LayoutDashboardIcon
-        />
-      ),
-    },
-    {
-      title: "Lifecycle",
-      url: "#",
-      icon: (
-        <ListIcon
-        />
-      ),
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: (
-        <ChartBarIcon
-        />
-      ),
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: (
-        <FolderIcon
-        />
-      ),
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: (
-        <UsersIcon
-        />
-      ),
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: (
-        <CameraIcon
-        />
-      ),
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: (
-        <FileTextIcon
-        />
-      ),
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: (
-        <FileTextIcon
-        />
-      ),
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: (
-        <Settings2Icon
-        />
-      ),
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: (
-        <CircleHelpIcon
-        />
-      ),
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: (
-        <SearchIcon
-        />
-      ),
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: (
-        <DatabaseIcon
-        />
-      ),
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: (
-        <FileChartColumnIcon
-        />
-      ),
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: (
-        <FileIcon
-        />
-      ),
-    },
-  ],
-}
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  {
+    title: "Accounts",
+    url: "/accounts",
+    icon: Landmark,
+  },
+  {
+    title: "Transactions",
+    url: "/transactions",
+    icon: ArrowLeftRight,
+  },
+  {
+    title: "Budgets",
+    url: "/budgets",
+    icon: PiggyBank,
+  },
+  {
+    title: "Categories",
+    url: "/categories",
+    icon: Tags,
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: Settings,
+  },
+]
+
+export function AppSidebar() {
+  const location = useLocation()
+
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="border-b border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
-              render={<a href="#" />}
-            >
-              <CommandIcon className="size-5!" />
-              <span className="text-base font-semibold">Acme Inc.</span>
+            <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent">
+              <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Landmark className="size-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-bold tracking-tight">Mint Alternative</span>
+                <span className="truncate text-xs text-muted-foreground">Personal Finance</span>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <SidebarGroup>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {NAV_ITEMS.map((item) => {
+                const isActive =
+                  item.url === "/"
+                    ? location.pathname === "/"
+                    : location.pathname.startsWith(item.url)
+
+                const Icon = item.icon
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      tooltip={item.title}
+                      isActive={isActive}
+                      render={
+                        <NavLink
+                          to={item.url}
+                          className={({ isActive: linkActive }) =>
+                            linkActive ? "font-semibold text-primary" : ""
+                          }
+                        />
+                      }
+                    >
+                      <Icon className="size-4" />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
+
+      <SidebarFooter className="border-t border-sidebar-border">
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

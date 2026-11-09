@@ -1,17 +1,34 @@
+// Problem details (RFC 7807)
+export interface ProblemDetails {
+  type: string
+  title: string
+  status: number
+  detail?: string
+  instance?: string
+  extensions?: Record<string, unknown>
+}
+
 // API Response wrappers
 export interface ApiResponse<T> {
   message: string
   data: T
 }
 
+export interface PaginationMeta {
+  has_next: boolean
+  has_prev: boolean
+  limit: number
+  records?: string
+  next_after_id?: string
+  next_after_created_at?: string
+  prev_before_id?: string
+  prev_before_created_at?: string
+}
+
 export interface PaginatedResponse<T> {
   message: string
   data: T[]
-  meta: {
-    total: number
-    limit: number
-    offset: number
-  }
+  meta?: PaginationMeta
 }
 
 // Auth
@@ -29,7 +46,7 @@ export interface User {
 export interface AuthTokens {
   access_token: string
   refresh_token: string
-  expires_at: string
+  expires_in: string // int64 string
 }
 
 export interface AuthResponse {
@@ -50,56 +67,51 @@ export interface Institution {
 
 // Account
 export type AccountType =
-  | "checking"
-  | "savings"
-  | "credit_card"
-  | "cash"
+  | "depository"
+  | "credit"
+  | "loan"
   | "investment"
-  | "mortgage"
-  | "auto_loan"
-  | "personal_loan"
-  | "student_loan"
   | "other_asset"
   | "other_liability"
 
 export type AccountSourceType = "manual" | "connected"
 
 export const ACCOUNT_TYPE_LABELS: Record<AccountType, string> = {
-  checking: "Checking",
-  savings: "Savings",
-  credit_card: "Credit Card",
-  cash: "Cash",
+  depository: "Checking / Savings",
+  credit: "Credit Card",
+  loan: "Loan",
   investment: "Investment",
-  mortgage: "Mortgage",
-  auto_loan: "Auto Loan",
-  personal_loan: "Personal Loan",
-  student_loan: "Student Loan",
   other_asset: "Other Asset",
   other_liability: "Other Liability",
 }
 
 export const LIABILITY_TYPES: AccountType[] = [
-  "credit_card",
-  "mortgage",
-  "auto_loan",
-  "personal_loan",
-  "student_loan",
+  "credit",
+  "loan",
   "other_liability",
+]
+
+export const ASSET_TYPES: AccountType[] = [
+  "depository",
+  "investment",
+  "other_asset",
 ]
 
 export interface Account {
   id: string
   user_id: string
-  institution_id: string | null
-  institution: Institution | null
   name: string
   account_type: AccountType
-  account_subtype: string | null
+  account_subtype: string
   currency: string
   current_balance: string
   available_balance: string | null
   credit_limit: string | null
   interest_rate: string | null
+  institution_id: string | null
+  institution_name: string | null
+  institution_display_name: string | null
+  institution_logo_url: string | null
   source_type: AccountSourceType
   created_at: string
   updated_at: string
@@ -112,9 +124,9 @@ export type CategoryType = "income" | "expense" | "transfer"
 export interface Category {
   id: string
   user_id: string | null
-  parent_id: string | null
+  parent_category_id: string | null
   name: string
-  category_type: CategoryType
+  type: CategoryType
   icon: string | null
   color: string | null
   is_system: boolean
@@ -131,9 +143,12 @@ export interface Transaction {
   id: string
   user_id: string
   account_id: string
-  account: Account | null
+  account_name: string
   category_id: string | null
-  category: Category | null
+  category_name: string | null
+  category_color: string | null
+  category_icon: string | null
+  category_type: string | null
   amount: string
   currency: string
   transaction_date: string
@@ -165,7 +180,7 @@ export interface BudgetCategory {
   id: string
   budget_id: string
   category_id: string
-  category: Category | null
+  category_name?: string
   allocated_amount: string
   actual_amount: string
   created_at: string
@@ -173,33 +188,43 @@ export interface BudgetCategory {
 }
 
 // Dashboard
-export interface SpendingByCategory {
+export interface CategorySpending {
   category_id: string
   category_name: string
-  color: string | null
-  icon: string | null
-  amount: string
+  category_icon: string | null
+  category_color: string | null
+  total_spent: string
+  percentage: number
+  transaction_count: string
 }
 
-export interface DashboardSummary {
+export interface CurrencySummary {
   currency: string
   net_worth: string
   total_assets: string
   total_liabilities: string
+  total_cash: string
+}
+
+export interface DashboardSummary {
+  primary_currency: string
+  total_cash: string
+  total_assets: string
+  total_liabilities: string
+  net_worth: string
   monthly_income: string
   monthly_expenses: string
-  spending_by_category: SpendingByCategory[]
+  savings_rate: number
+  by_currency: CurrencySummary[]
+  spending_by_category: CategorySpending[]
   recent_transactions: Transaction[]
 }
 
-// Pagination
-export interface PaginationParams {
-  limit?: number
-  offset?: number
-}
-
 // Transaction filters
-export interface TransactionFilters extends PaginationParams {
+export interface TransactionFilters {
+  limit?: number
+  after?: string
+  before?: string
   account_id?: string
   category_id?: string
   start_date?: string

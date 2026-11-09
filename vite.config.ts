@@ -15,7 +15,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": {
-        target: "https://localhost:3001",
+        target: "https://localhost:3000",
         secure: false, // allow self-signed TLS cert in dev
         changeOrigin: true,
       },

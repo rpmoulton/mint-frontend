@@ -142,13 +142,8 @@ const chartConfig = {
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = React.useState("90d")
-
-  React.useEffect(() => {
-    if (isMobile) {
-      setTimeRange("7d")
-    }
-  }, [isMobile])
+  const [selectedTimeRange, setSelectedTimeRange] = React.useState<string | null>(null)
+  const timeRange = selectedTimeRange ?? (isMobile ? "7d" : "90d")
 
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date)
@@ -179,7 +174,7 @@ export function ChartAreaInteractive() {
             multiple={false}
             value={timeRange ? [timeRange] : []}
             onValueChange={(value) => {
-              setTimeRange(value[0] ?? "90d")
+              setSelectedTimeRange(value[0] ?? "90d")
             }}
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
@@ -192,7 +187,7 @@ export function ChartAreaInteractive() {
             value={timeRange}
             onValueChange={(value) => {
               if (value !== null) {
-                setTimeRange(value)
+                setSelectedTimeRange(value)
               }
             }}
           >
@@ -268,9 +263,9 @@ export function ChartAreaInteractive() {
               cursor={false}
               content={
                 <ChartTooltipContent
-                  labelFormatter={(value: any) => {
+                  labelFormatter={(value: unknown) => {
                     if (!value) return ""
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(String(value)).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                     })
