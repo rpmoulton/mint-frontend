@@ -5,13 +5,9 @@ import { ProtectedRoute } from "@/components/protected-route"
 import { AppLayout } from "@/components/layout/app-layout"
 import { LoginPage } from "@/pages/login"
 import { DashboardPage } from "@/pages/dashboard"
-import {
-  AccountsPage,
-  TransactionsPage,
-  BudgetsPage,
-  CategoriesPage,
-  SettingsPage,
-} from "@/pages/placeholder-page"
+import { AccountsPage } from "@/pages/accounts"
+import { TransactionsPage } from "@/pages/transactions"
+import { BudgetsPage, CategoriesPage, SettingsPage } from "@/pages/placeholder-page"
 
 const queryClient = new QueryClient({
   defaultOptions: {

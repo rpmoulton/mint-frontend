@@ -307,12 +307,13 @@ export const transactionsApi = {
     account_id: string
     category_id?: string
     amount: string
-    currency: string
+    currency?: string
     transaction_date: string
     merchant_name?: string
     description: string
     notes?: string
     transaction_type: string
+    status?: string
   }) =>
     apiFetch<ApiResponse<Transaction>>("/transactions", {
       method: "POST",
@@ -321,12 +322,17 @@ export const transactionsApi = {
   update: (
     id: string,
     body: Partial<{
+      account_id: string
       category_id: string | null
       amount: string
-      merchant_name: string
-      description: string
-      notes: string
+      currency: string
       transaction_date: string
+      posted_date: string | null
+      merchant_name: string | null
+      description: string
+      notes: string | null
+      transaction_type: string
+      status: string
     }>,
   ) =>
     apiFetch<ApiResponse<Transaction>>(`/transactions/${id}`, {

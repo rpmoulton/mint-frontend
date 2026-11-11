@@ -14,17 +14,6 @@ export interface ApiResponse<T> {
   data: T
 }
 
-export interface PaginationMeta {
-  has_next: boolean
-  has_prev: boolean
-  limit: number
-  records?: string
-  next_after_id?: string
-  next_after_created_at?: string
-  prev_before_id?: string
-  prev_before_created_at?: string
-}
-
 export interface PaginatedResponse<T> {
   message: string
   data: T[]
@@ -223,12 +212,23 @@ export interface DashboardSummary {
 // Transaction filters
 export interface TransactionFilters {
   limit?: number
-  after?: string
-  before?: string
+  offset?: number
   account_id?: string
   category_id?: string
   start_date?: string
   end_date?: string
-  transaction_type?: TransactionType
+  transaction_type?: string
   search?: string
+}
+
+// Pagination metadata returned by paginated list endpoints
+export interface PaginationMeta {
+  has_next: boolean
+  has_prev: boolean
+  limit: number
+  records?: number | string
+  next_after_id?: string
+  next_after_created_at?: string
+  prev_before_id?: string
+  prev_before_created_at?: string
 }
