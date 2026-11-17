@@ -244,9 +244,7 @@ Contribution guidelines will be added as the project matures.
 
 ## License
 
-License to be determined.
-
-The project is intended to be open source. The final license will be selected after reviewing the licensing requirements of incorporated templates, components, and dependencies.
+This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
