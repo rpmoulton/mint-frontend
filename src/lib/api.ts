@@ -284,9 +284,9 @@ export const categoriesApi = {
     body: Partial<{
       name: string
       type: string
-      parent_category_id: string
-      icon: string
-      color: string
+      parent_category_id: string | null
+      icon: string | null
+      color: string | null
     }>,
   ) =>
     apiFetch<ApiResponse<Category>>(`/categories/${id}`, {

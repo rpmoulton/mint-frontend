@@ -7,7 +7,8 @@ import { LoginPage } from "@/pages/login"
 import { DashboardPage } from "@/pages/dashboard"
 import { AccountsPage } from "@/pages/accounts"
 import { TransactionsPage } from "@/pages/transactions"
-import { BudgetsPage, CategoriesPage, SettingsPage } from "@/pages/placeholder-page"
+import { CategoriesPage } from "@/pages/categories"
+import { BudgetsPage, SettingsPage } from "@/pages/placeholder-page"
 
 const queryClient = new QueryClient({
   defaultOptions: {
