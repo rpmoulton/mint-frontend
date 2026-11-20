@@ -8,7 +8,7 @@ The application is designed to be responsive, mobile-friendly, and eventually in
 
 > **Project Status:** Early development. Features and integrations are being implemented incrementally.
 
-![Mint Alternative Live Financial Dashboard](docs/screenshots/dashboard.png)
+![Financial dashboard showing net worth, monthly cash flow, and spending by category](docs/screenshots/dashboard.png)
 
 ## Tech Stack
 
@@ -24,14 +24,13 @@ The application is designed to be responsive, mobile-friendly, and eventually in
 | React Router | Client-side routing |
 | vite-plugin-pwa | Planned PWA support |
 
-## Planned Features
+## Current and Planned Features
 
 ### Dashboard
 
-- Overview of connected financial accounts
 - Total assets, liabilities, and net worth
 - Monthly income and expenses
-- Spending trends and category breakdowns
+- Monthly spending breakdown by category
 - Recent transactions and financial activity
 
 ### Accounts
@@ -39,25 +38,34 @@ The application is designed to be responsive, mobile-friendly, and eventually in
 - Checking and savings accounts
 - Credit cards and loans
 - Investment accounts
-- Manual account management
-- Account balance history
+- Balances grouped by account type
+- Manual account creation, editing, archiving, and restoration
+- Account balance history (planned)
+
+![Financial accounts showing assets, liabilities, and balances grouped by account type](docs/screenshots/accounts.png)
 
 ### Transactions
 
 - Searchable and filterable transaction history
 - Transaction categorization
-- Custom categories and merchant rules
 - Manual transaction entry
-- Recurring transaction identification
+- Transaction editing and deletion
+- Merchant rules and recurring transaction identification (planned)
 
-### Budgets
+### Categories
+
+- Built-in and custom income, expense, and transfer categories
+- Custom category creation, editing, and deletion
+- Parent categories with subcategories
+
+### Budgets (planned)
 
 - Monthly and category-based budgets
 - Budget utilization and remaining balances
 - Spending progress indicators
 - Historical budget comparisons
 
-### Financial Insights
+### Financial Insights (planned)
 
 - Income and expense trends
 - Net worth tracking
@@ -194,13 +202,16 @@ Available API resources include:
 - [x] Income and expense charts
 - [x] Spending category visualization
 - [x] Recent transactions
-- [ ] Account balance summaries
 
 ### Phase 3 — Financial Management
 
-- [ ] Account management screens
-- [ ] Transaction list and filters
-- [ ] Transaction editing and categorization
+- [x] Account balance summaries on the Accounts page
+- [x] Account management screens
+- [x] Transaction list, search, and filters
+- [x] Transaction editing and categorization
+- [x] Manual transaction entry and deletion
+- [x] Custom category management
+- [ ] Account balance history
 - [ ] Monthly budget management
 - [ ] Financial insights
 
