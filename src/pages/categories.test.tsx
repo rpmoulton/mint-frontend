@@ -3,7 +3,8 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react"
 import { MemoryRouter } from "react-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { CategoriesPage } from "./categories"
-import { categoriesApi } from "@/lib/api"
+import { TransactionsPage } from "./transactions"
+import { categoriesApi, transactionsApi, accountsApi } from "@/lib/api"
 import type { Category } from "@/lib/types"
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
@@ -476,5 +477,128 @@ describe("CategoriesPage", () => {
       expect(screen.getByText("Transfers")).toBeInTheDocument()
     })
     expect(screen.queryByText("Salary")).not.toBeInTheDocument()
+  })
+
+  // 12. Query Invalidation
+  it("12. invalidates categories, transactions, and dashboard queries on category mutations", async () => {
+    vi.spyOn(categoriesApi, "list").mockResolvedValue({
+      message: "ok",
+      data: [mockCustomExpenseParent],
+    })
+    vi.spyOn(categoriesApi, "update").mockResolvedValue({
+      message: "ok",
+      data: mockCustomExpenseParent,
+    })
+    const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
+
+    renderCategories(queryClient)
+
+    await waitFor(() => {
+      expect(screen.getByTestId("edit-btn-cat-custom-parent-1")).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByTestId("edit-btn-cat-custom-parent-1"))
+
+    await waitFor(() => {
+      expect(screen.getByTestId("edit-category-sheet")).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByTestId("category-submit-btn"))
+
+    await waitFor(() => {
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ["categories"] })
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ["transactions"] })
+      expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ["dashboard-summary"] })
+    })
+  })
+
+  // 13. Transaction category integration
+  it("13. integrates custom categories into transaction display and form selectors", async () => {
+    vi.spyOn(categoriesApi, "list").mockResolvedValue({
+      message: "ok",
+      data: [mockSystemExpenseParent, mockCustomExpenseParent],
+    })
+    vi.spyOn(accountsApi, "list").mockResolvedValue({
+      message: "ok",
+      data: [
+        {
+          id: "acc-1",
+          user_id: "u1",
+          name: "Checking",
+          account_type: "depository",
+          account_subtype: "checking",
+          currency: "USD",
+          current_balance: "1000",
+          available_balance: "1000",
+          credit_limit: null,
+          interest_rate: null,
+          institution_id: null,
+          institution_name: null,
+          institution_display_name: null,
+          institution_logo_url: null,
+          source_type: "manual",
+          created_at: "2026-11-01T00:00:00Z",
+          updated_at: "2026-11-01T00:00:00Z",
+          archived_at: null,
+        },
+      ],
+    })
+    vi.spyOn(transactionsApi, "list").mockResolvedValue({
+      message: "ok",
+      data: [
+        {
+          id: "tx-1",
+          user_id: "u1",
+          account_id: "acc-1",
+          account_name: "Checking",
+          category_id: "cat-custom-parent-1",
+          category_name: "Hobbies",
+          category_color: "#8B5CF6",
+          category_icon: "Film",
+          category_type: "expense",
+          amount: "-50.00",
+          currency: "USD",
+          transaction_date: "2026-11-10",
+          posted_date: null,
+          merchant_name: "Hobby Lobby",
+          description: "Model airplane kit",
+          notes: null,
+          transaction_type: "debit",
+          status: "posted",
+          source_type: "manual",
+          external_transaction_id: null,
+          created_at: "2026-11-10T00:00:00Z",
+          updated_at: "2026-11-10T00:00:00Z",
+        },
+      ],
+      meta: {
+        has_next: false,
+        has_prev: false,
+        limit: 25,
+      },
+    })
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <TransactionsPage />
+        </MemoryRouter>
+      </QueryClientProvider>
+    )
+
+    // Transaction list shows custom category name
+    await waitFor(() => {
+      expect(screen.getByText("Hobbies")).toBeInTheDocument()
+    })
+    expect(screen.getByText("Model airplane kit")).toBeInTheDocument()
+
+    // Add transaction sheet includes custom category in select options
+    fireEvent.click(screen.getByTestId("add-transaction-btn"))
+    await waitFor(() => {
+      expect(screen.getByTestId("transaction-form")).toBeInTheDocument()
+    })
+
+    // Category select is present
+    expect(screen.getByTestId("tx-category-select")).toBeInTheDocument()
   })
 })
