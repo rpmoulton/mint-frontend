@@ -10,7 +10,6 @@ import type {
   Category,
   Transaction,
   Budget,
-  BudgetCategory,
   DashboardSummary,
   TransactionFilters,
 } from "./types"
@@ -344,7 +343,8 @@ export const transactionsApi = {
 
 // Budgets API
 export const budgetsApi = {
-  list: () => apiFetch<ApiResponse<Budget[]>>("/budgets"),
+  list: (params?: { year?: number; month?: number }) =>
+    apiFetch<ApiResponse<Budget[]>>(`/budgets${buildQuery(params || {})}`),
   get: (id: string) => apiFetch<ApiResponse<Budget>>(`/budgets/${id}`),
   create: (body: { name: string; month: number; year: number }) =>
     apiFetch<ApiResponse<Budget>>("/budgets", {
@@ -358,12 +358,12 @@ export const budgetsApi = {
     }),
   delete: (id: string) => apiFetch<void>(`/budgets/${id}`, { method: "DELETE" }),
   upsertCategory: (budgetId: string, body: { category_id: string; allocated_amount: string }) =>
-    apiFetch<ApiResponse<BudgetCategory>>(`/budgets/${budgetId}/categories`, {
-      method: "PUT",
+    apiFetch<ApiResponse<Budget>>(`/budgets/${budgetId}/categories`, {
+      method: "POST",
       body: JSON.stringify(body),
     }),
   deleteCategory: (budgetId: string, categoryId: string) =>
-    apiFetch<void>(`/budgets/${budgetId}/categories/${categoryId}`, { method: "DELETE" }),
+    apiFetch<ApiResponse<Budget>>(`/budgets/${budgetId}/categories/${categoryId}`, { method: "DELETE" }),
 }
 
 // Dashboard API

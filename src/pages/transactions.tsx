@@ -666,6 +666,7 @@ export function TransactionsPage() {
     void queryClient.invalidateQueries({ queryKey: ["transactions"] })
     void queryClient.invalidateQueries({ queryKey: ["accounts"] })
     void queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] })
+    void queryClient.invalidateQueries({ queryKey: ["budgets"] })
   }, [queryClient])
 
   // ── Queries ──────────────────────────────────────────────────────────────────

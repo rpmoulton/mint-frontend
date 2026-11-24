@@ -740,6 +740,7 @@ export function CategoriesPage() {
     void queryClient.invalidateQueries({ queryKey: ["categories"] })
     void queryClient.invalidateQueries({ queryKey: ["transactions"] })
     void queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] })
+    void queryClient.invalidateQueries({ queryKey: ["budgets"] })
   }, [queryClient])
 
   // Counts for tabs

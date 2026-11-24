@@ -160,6 +160,8 @@ export interface Budget {
   name: string
   month: number
   year: number
+  total_allocated?: string
+  total_spent?: string
   created_at: string
   updated_at: string
   categories?: BudgetCategory[]
@@ -170,10 +172,17 @@ export interface BudgetCategory {
   budget_id: string
   category_id: string
   category_name?: string
+  category_type?: string
+  category_icon?: string | null
+  category_color?: string | null
   allocated_amount: string
-  actual_amount: string
-  created_at: string
-  updated_at: string
+  spent_amount?: string
+  actual_amount?: string
+  remaining_amount?: string
+  percent_used?: number
+  is_over_budget?: boolean
+  created_at?: string
+  updated_at?: string
 }
 
 // Dashboard
